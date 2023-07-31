@@ -1,5 +1,5 @@
 class Ride
-  attr_reader :name, :min_height, :admission_fee, :excitement, :total_revenue, :rider_log
+  attr_reader :name, :min_height, :admission_fee, :excitement, :total_revenue, :rider_log, :total_rides
   def initialize(ride_data)
     @name = ride_data[:name]
     @min_height = ride_data[:min_height]
@@ -7,6 +7,7 @@ class Ride
     @excitement = ride_data[:excitement]
     @total_revenue = 0
     @rider_log = {}
+    @total_rides = 0
   end
 
   def board_rider(visitor)
@@ -18,6 +19,7 @@ class Ride
       else
         @rider_log[visitor] += 1
       end
+      @total_rides += 1
     end
   end
 end
