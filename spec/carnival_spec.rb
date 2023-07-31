@@ -22,11 +22,33 @@ RSpec.describe Carnival do
     expect(@carnival.rides).to eq([ride1])
   end
 
-  it "Check most profitalable" do
+  it "Check most profitalable ride" do
     @carnival.add_ride(@ride1)
     @carnival.add_ride(@ride2)
     @carnival.add_ride(@ride3)
-    
+
+    @visitor1.add_preference(:gentle)
+    @visitor2.add_preference(:gentle)
+    @visitor2.add_preference(:thrilling)
+    @visitor3.add_preference(:thrilling)
+
+    @carnival.ride_a_ride(@ride1, @visitor1)
+    @carnival.ride_a_ride(@ride1, @visitor1)
+    @carnival.ride_a_ride(@ride1, @visitor2)
+    @carnival.ride_a_ride(@ride3, @visitor1)
+    @carnival.ride_a_ride(@ride3, @visitor2)
+    @carnival.ride_a_ride(@ride3, @visitor3)
+
+    expect(@carnival.rides[0].rider_log).to eq({@visitor1 => 2, @visitor2 => 1})
+    expect(@carnival.rides[2].rider_log).to eq({@visitor3 => 1})
+    expect(@carnival.most_profitable_ride).to eq(@ride1)
+  end
+
+  it "check most popular ride" do
+    @carnival.add_ride(@ride1)
+    @carnival.add_ride(@ride2)
+    @carnival.add_ride(@ride3)
+
     @visitor1.add_preference(:gentle)
     @visitor2.add_preference(:gentle)
     @visitor2.add_preference(:thrilling)
@@ -42,7 +64,27 @@ RSpec.describe Carnival do
     expect(@carnival.rides[0].rider_log).to eq({@visitor1 => 2, @visitor2 => 1})
     expect(@carnival.rides[2].rider_log).to eq({@visitor3 => 1})
     expect(@carnival.most_popular_ride).to eq(@ride1)
-    expect(@carnival.most_profitable_ride).to eq(@ride1)
+  end
+
+  it "check total revenue" do
+    @carnival.add_ride(@ride1)
+    @carnival.add_ride(@ride2)
+    @carnival.add_ride(@ride3)
+
+    @visitor1.add_preference(:gentle)
+    @visitor2.add_preference(:gentle)
+    @visitor2.add_preference(:thrilling)
+    @visitor3.add_preference(:thrilling)
+
+    @carnival.ride_a_ride(@ride1, @visitor1)
+    @carnival.ride_a_ride(@ride1, @visitor1)
+    @carnival.ride_a_ride(@ride1, @visitor2)
+    @carnival.ride_a_ride(@ride3, @visitor1)
+    @carnival.ride_a_ride(@ride3, @visitor2)
+    @carnival.ride_a_ride(@ride3, @visitor3)
+
+    expect(@carnival.rides[0].rider_log).to eq({@visitor1 => 2, @visitor2 => 1})
+    expect(@carnival.rides[2].rider_log).to eq({@visitor3 => 1})
     expect(@carnival.total_revenue).to eq(5)
   end
 end
